@@ -41,13 +41,14 @@ void idle()
 
 void schedule()
 {
+    thread_t *cur = curr_thread;
     lock();
     do
     {
         curr_thread = (thread_t *)curr_thread->listhead.next;
     } while (list_is_head(&curr_thread->listhead, run_queue) || curr_thread->iszombie);
 
-    switch_to(get_current(), &curr_thread->context);
+    switch_to(&cur->context, &curr_thread->context);
     unlock();
 }
 
